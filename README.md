@@ -131,7 +131,7 @@ EOF
 ```bash
 cat > docker-compose.yml << 'EOF'
 version: '3.8'
- 
+
 services:
   app:
     build: .
@@ -143,20 +143,20 @@ services:
         condition: service_healthy
     environment:
       - DB_HOST=db
-      - DB_USER=appuser
-      - DB_PASSWORD=apppassword
-      - DB_NAME=appdb
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
     restart: on-failure
- 
+
   db:
     image: mysql:8.0
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: appdb
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppassword
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -167,7 +167,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
- 
+
 volumes:
   db_data:
 EOF
