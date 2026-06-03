@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+        .container { width: 100%; max-width: 560px; }
+        h1 { font-size: 1.8rem; color: #1a1a2e; margin-bottom: 24px; text-align: center; }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .add-form { display: flex; gap: 10px; }
+        .add-form input {
+            flex: 1; padding: 10px 14px;
+            border: 1.5px solid #dde1e7; border-radius: 8px;
+            font-size: 0.95rem; outline: none;
+        }
+        .add-form input:focus { border-color: #4f46e5; }
+        .add-form button {
+            padding: 10px 20px; background: #4f46e5; color: white;
+            border: none; border-radius: 8px; font-size: 0.95rem; cursor: pointer;
+        }
+        .add-form button:hover { background: #4338ca; }
+        .task-list { list-style: none; }
+        .task-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .task-item:last-child { border-bottom: none; }
+        .task-id { font-size: 0.75rem; color: #aaa; margin-right: 8px; }
+        .task-name { font-size: 0.95rem; color: #333; }
+        .delete-btn {
+            padding: 5px 12px; background: #fee2e2; color: #dc2626;
+            border: none; border-radius: 6px; font-size: 0.82rem; cursor: pointer;
+        }
+        .delete-btn:hover { background: #fecaca; }
+        .empty { text-align: center; color: #aaa; padding: 20px 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Task Manager</h1>
+        <div class="card">
+            <form class="add-form" action="/add" method="POST">
+                <input type="text" name="name" placeholder="Введите название задачи..." required>
+                <button type="submit">Добавить</button>
+            </form>
+        </div>
+        <div class="card">
+            {% if tasks %}
+            <ul class="task-list">
+                {% for task in tasks %}
+                <li class="task-item">
+                    <span>
+                        <span class="task-id">#{{ task[0] }}</span>
+                        <span class="task-name">{{ task[1] }}</span>
+                    </span>
+                    <form action="/delete/{{ task[0] }}" method="POST" style="margin:0">
+                        <button class="delete-btn" type="submit">Удалить</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty">Задач пока нет. Добавьте первую!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
