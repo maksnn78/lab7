@@ -60,17 +60,17 @@ cat > app/app.py << 'EOF'
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 import os
- 
+
 app = Flask(__name__)
- 
+
 def get_db():
     return mysql.connector.connect(
-        host=os.environ.get("DB_HOST", "db"),
-        user=os.environ.get("DB_USER", "appuser"),
-        password=os.environ.get("DB_PASSWORD", "apppassword"),
-        database=os.environ.get("DB_NAME", "appdb")
+        host=os.environ.get("DB_HOST"),
+        user=os.environ.get("DB_USER"),
+        password=os.environ.get("DB_PASSWORD"),
+        database=os.environ.get("DB_NAME")
     )
- 
+
 @app.route("/", methods=["GET"])
 def index():
     conn = get_db()
@@ -80,7 +80,7 @@ def index():
     cursor.close()
     conn.close()
     return render_template("index.html", tasks=tasks)
- 
+
 @app.route("/add", methods=["POST"])
 def add_task():
     name = request.form.get("name", "").strip()
@@ -92,7 +92,7 @@ def add_task():
         cursor.close()
         conn.close()
     return redirect(url_for("index"))
- 
+
 @app.route("/delete/<int:task_id>", methods=["POST"])
 def delete_task(task_id):
     conn = get_db()
@@ -102,7 +102,7 @@ def delete_task(task_id):
     cursor.close()
     conn.close()
     return redirect(url_for("index"))
- 
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
 EOF
